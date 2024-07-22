@@ -7,3 +7,10 @@ class Book(models.Model):
     author = models.CharField(max_length=20)
     published = models.DateField()
     active = models.BooleanField(default=True)
+
+class Loans(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    UserID = models.IntegerField()
+    BookID = models.IntegerField()
+    active = models.BooleanField(default=True)
+    
