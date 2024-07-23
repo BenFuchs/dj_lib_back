@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import BlacklistedToken
 from rest_framework.exceptions import AuthenticationFailed
-
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from django.contrib.auth.models import User
 from .models import Book, Loans
@@ -55,11 +55,10 @@ def register(request):
     except Exception as e:
         return Response({'error': str(e)})
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'DELETE', 'PUT'])
 def book_view(request, id=None):
-    """
-    API endpoint for CRUD operations on books.
-    """
+    parser_classes = (MultiPartParser, FormParser)
+
     if request.method == 'GET':
         if id is not None:
             try:
@@ -77,7 +76,6 @@ def book_view(request, id=None):
         if serializer.is_valid():
             serializer.save()
             return Response({"msg": "Book added successfully"})
-        
         return Response(serializer.errors)
     
     elif request.method == 'DELETE':
@@ -96,8 +94,7 @@ def book_view(request, id=None):
             if serializer.is_valid():
                 serializer.save()
                 return Response({'msg': 'Book updated successfully'})
-            else:
-                return Response(serializer.errors)
+            return Response(serializer.errors)
         except Book.DoesNotExist:
             return Response({'error': 'Book not found'}, status=404)
 

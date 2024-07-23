@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
-        fields = '__all__'
+        fields = ['id', 'bName', 'author', 'published', 'active', 'image']
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
